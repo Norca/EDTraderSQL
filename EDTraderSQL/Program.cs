@@ -40,18 +40,18 @@ namespace EDTraderSQL
             // Clear default tables and adds starting data from textfiles
             using (var db = new EDTSQLEntities())
             {
-                //Delete CommodityGroups
-                db.CommodityGroups.RemoveRange(db.CommodityGroups);
-                db.SaveChangesAsync();
                 //Delete Commodities
                 db.Commodities.RemoveRange(db.Commodities);
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 //Delete Rares
                 db.RareCommodities.RemoveRange(db.RareCommodities);
-                db.SaveChangesAsync();
+                db.SaveChanges();
+                //Delete CommodityGroups
+                db.CommodityGroups.RemoveRange(db.CommodityGroups);
+                db.SaveChanges();
                 //Delete Materials
                 db.MaterialLists.RemoveRange(db.MaterialLists);
-                db.SaveChangesAsync();
+                db.SaveChanges();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 var resourceName = "";
@@ -69,12 +69,10 @@ namespace EDTraderSQL
                         db.CommodityGroups.Add(new CommodityGroup() { CommodGroupName = cd.Name });
                         db.SaveChanges();
 
-                        CommodityGroup ComGrp = db.CommodityGroups.SingleOrDefault(o => o.CommodGroupName == cd.Name);
-
                         foreach (var item in cd.Commodities)
                         {
 
-                            db.Commodities.Add(new Commodity() { CommodGroupID = ComGrp.CommodGroupID, CommodityName = item.Name, EDCodeName = item.EDCode });
+                            db.Commodities.Add(new Commodity() { CommodGroupName = cd.Name, CommodityName = item.Name, EDCodeName = item.EDCode });
                         }
                     }
                     db.SaveChanges();
@@ -90,18 +88,20 @@ namespace EDTraderSQL
                 {
                     string line = null;
 
+                    //Added to cover the Rares that we do not know the group of
+                    db.CommodityGroups.Add(new CommodityGroup() { CommodGroupName = "NotKnown" });
+                    db.SaveChanges();
+
                     while ((line = reader.ReadLine()) != null)
                     {
                         RaresData rd = JsonConvert.DeserializeObject<RaresData>(line);
 
-                        CommodityGroup ComGrp = db.CommodityGroups.SingleOrDefault(o => o.CommodGroupName == rd.Name);
-
                         foreach (var item in rd.Rares)
                         {
-                            db.RareCommodities.Add(new RareCommodity() { CommodGroupID = ComGrp.CommodGroupID, CommodityName = item.Name, EDCodeName = item.EDCode });
+                            db.RareCommodities.Add(new RareCommodity() { CommodGroupName = rd.Name, CommodityName = item.Name, EDCodeName = item.EDCode });
                         }
                     }
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                     reader.Dispose();
                     stream.Dispose();
                 }
@@ -123,7 +123,7 @@ namespace EDTraderSQL
                             db.MaterialLists.Add(new MaterialList() { MaterialGroup = md.Name, MaterialName = item.Name, EDCodeName = item.EDCode });
                         }
                     }
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                     reader.Dispose();
                     stream.Dispose();
                 }

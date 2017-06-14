@@ -20,7 +20,7 @@ namespace EDTraderSQL
                 {
                     item.StockChecked = false; //false
                 }
-                db.SaveChangesAsync();
+                db.SaveChanges();
 
                 foreach (var inventitem in cargo.Inventory)
                 {
@@ -75,7 +75,7 @@ namespace EDTraderSQL
                         MaterialList matlookup = db.MaterialLists.Where(p => p.EDCodeName == item.Name).First();
                         db.Materials.Add(new Material() { MaterialName = matlookup.MaterialName, Quantity = item.Count, MaterialGroup = "Encoded" });
                     }
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 db.Dispose();
             }
@@ -138,7 +138,7 @@ namespace EDTraderSQL
                     if (fsdjump.Factions != null)
                     {
                         db.Factions.RemoveRange(db.Factions.Where(x => x.StarSystemID == starsystem.SystemID));
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
 
                         //Store array of Factions present in System
                         foreach (var item in fsdjump.Factions)
@@ -149,7 +149,7 @@ namespace EDTraderSQL
                             addFact.FactionName = item.Name;
                             db.Factions.Add(addFact);
                         }
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
                     }
 
                     //Update System record
@@ -193,7 +193,7 @@ namespace EDTraderSQL
                             addFact.FactionName = item.Name;
                             db.Factions.Add(addFact);
                         }
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
                     }
                 }
                 db.Dispose();
@@ -252,7 +252,7 @@ namespace EDTraderSQL
                     if (location.Factions != null)
                     {
                         db.Factions.RemoveRange(db.Factions.Where(x => x.StarSystemID == starsystem.SystemID));
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
                         //Store array of Factions present in System
                         foreach (var item in location.Factions)
                         {
@@ -262,7 +262,7 @@ namespace EDTraderSQL
                             addFact.FactionName = item.Name;
                             db.Factions.Add(addFact);
                         }
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
                     }
                     //Display current System Faction
                     lblFaction.Text = starsystem.SystemFaction;

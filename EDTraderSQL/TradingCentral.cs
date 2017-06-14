@@ -205,17 +205,17 @@ namespace EDTraderSQL
 
         private void ReadMarketLines()
         {
-            Dictionary<string, int> CommodityInGroup = new Dictionary<string, int>();
-            Dictionary<string, int> RareInGroup = new Dictionary<string, int>();
+            Dictionary<string, string> CommodityInGroup = new Dictionary<string, string>();
+            Dictionary<string, string> RareInGroup = new Dictionary<string, string>();
             using (var db = new EDTSQLEntities())
             {
                 foreach (var commod in db.Commodities)
                 {
-                    CommodityInGroup.Add(commod.CommodityName, commod.CommodityGroup.CommodGroupID);
+                    CommodityInGroup.Add(commod.CommodityName, commod.CommodGroupName);
                 }
                 foreach (var rare in db.RareCommodities)
                 {
-                    RareInGroup.Add(rare.CommodityName, rare.CommodityGroup.CommodGroupID);
+                    RareInGroup.Add(rare.CommodityName, rare.CommodGroupName);
                 }
                 db.Dispose();
             }
@@ -303,7 +303,7 @@ namespace EDTraderSQL
                                 {
                                     SystemID = starsystem.SystemID,
                                     StationID = station.StationID,
-                                    CommodGroupID = CommodityInGroup[marketcommodity.Commodity],
+                                    CommodGroupName = CommodityInGroup[marketcommodity.Commodity],
                                     CommodityName = marketcommodity.Commodity,
                                     SellPrice = marketcommodity.SellPrice,
                                     BuyPrice = marketcommodity.BuyPrice,
@@ -319,7 +319,7 @@ namespace EDTraderSQL
                                 {
                                     SystemID = starsystem.SystemID,
                                     StationID = station.StationID,
-                                    CommodGroupID = RareInGroup[marketcommodity.Commodity],
+                                    CommodGroupName = RareInGroup[marketcommodity.Commodity],
                                     CommodityName = marketcommodity.Commodity,
                                     SellPrice = marketcommodity.SellPrice,
                                     BuyPrice = marketcommodity.BuyPrice,
@@ -330,7 +330,7 @@ namespace EDTraderSQL
                             }
                         }
                         UpdateMonitor("Market Data - Updated");
-                        db.SaveChangesAsync();
+                        db.SaveChanges();
                         db.Dispose();
                         MarketDirty = false;
                         btnMDirty.BackColor = Color.Red;

@@ -17,16 +17,16 @@ namespace EDTraderSQL
         public int MarketEntryID { get; set; }
         public Nullable<int> SystemID { get; set; }
         public Nullable<int> StationID { get; set; }
-        public Nullable<int> CommodGroupID { get; set; }
         public string CommodityName { get; set; }
         public Nullable<int> SellPrice { get; set; }
         public Nullable<int> BuyPrice { get; set; }
         public Nullable<int> DemandStatus { get; set; }
         public Nullable<int> SupplyStatus { get; set; }
         public System.DateTime EntryDate { get; set; }
+        public string CommodGroupName { get; set; }
     
-        public virtual CommodityGroup CommodityGroup { get; set; }
         public virtual StarSystem StarSystem { get; set; }
         public virtual Station Station { get; set; }
+        public virtual CommodityGroup CommodityGroup { get; set; }
     }
 }

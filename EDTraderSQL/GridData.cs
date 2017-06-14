@@ -222,10 +222,10 @@ namespace EDTraderSQL
                     if (CurrSystem.Contains("-") == true)
                     {
                         int index = CurrSystem.IndexOf("-");
-                        CurrSystem = (index > 0 ? CurrSystem.Substring(0, index - 1) : "");
+                        CurrSystem = (index > 1 ? CurrSystem.Substring(0, index - 1) : null);
                     }
                 }
-                if (CurrSystem != null | CurrSystem != "")
+                if (CurrSystem != null)
                 {
                     StarSystem currsystem = db.StarSystems.SingleOrDefault(n => n.SystemName == CurrSystem);
 
@@ -286,12 +286,20 @@ namespace EDTraderSQL
                     if (CurrSystem.Contains("-") == true)
                     {
                         int index = CurrSystem.IndexOf("-");
-                        CurrSystem = (index > 0 ? CurrSystem.Substring(0, index - 1) : "");
+                        CurrSystem = (index > 1 ? CurrSystem.Substring(0, index - 1) : null);
                     }
                 }
-                if (CurrSystem != null | CurrSystem != "")
+                if (CurrSystem != null)
                 {
-                    StarSystem currsystem = db.StarSystems.Single(n => n.SystemName == CurrSystem); // Get Current System
+                    StarSystem currsystem = new StarSystem();
+                    if (CurrSystem == "")
+                    {
+                        currsystem = new StarSystem() { SpaceX = 0, SpaceY = 0, SpaceZ = 0 };
+                    }
+                    else
+                    {
+                        currsystem = db.StarSystems.Single(n => n.SystemName == CurrSystem); // Get Current System
+                    }
 
                     if (db.ActiveMissions.Count() > 0)
                     {
