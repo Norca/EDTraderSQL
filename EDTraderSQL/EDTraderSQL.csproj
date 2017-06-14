@@ -8,9 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>EDTraderSQL</RootNamespace>
     <AssemblyName>EDTraderSQL</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -47,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -72,6 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ActiveMission.cs">
       <DependentUpon>EDTSQL.tt</DependentUpon>
     </Compile>
@@ -108,6 +115,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GridData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JSONEvents.cs" />
     <Compile Include="MarketDetail.cs">
       <DependentUpon>EDTSQL.tt</DependentUpon>
     </Compile>
@@ -117,6 +128,7 @@
     <Compile Include="MaterialList.cs">
       <DependentUpon>EDTSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="OtherClasses.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RareCommodity.cs">
@@ -128,6 +140,12 @@
     <Compile Include="Station.cs">
       <DependentUpon>EDTSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="TradingCentral.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TradingCentral.designer.cs">
+      <DependentUpon>TradingCentral.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -136,7 +154,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TradingCentral.resx">
+      <DependentUpon>TradingCentral.cs</DependentUpon>
+    </EmbeddedResource>
     <EntityDeploy Include="EDTSQL.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EDTSQL.Designer.cs</LastGenOutput>
@@ -159,6 +181,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DefaultCommodities.txt" />
+    <Content Include="DefaultMaterials.txt" />
+    <Content Include="DefaultRares.txt" />
+    <Content Include="EDIcons.ico" />
     <Content Include="EDT.mdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

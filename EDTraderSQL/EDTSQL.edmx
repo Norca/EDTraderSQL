@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EDTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EDTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActiveMissions">
           <Key>
             <PropertyRef Name="MissionID" />
@@ -13,7 +13,7 @@
           <Property Name="MissionType" Type="text" />
           <Property Name="DestinationSystem" Type="text" />
           <Property Name="DestinationStation" Type="text" />
-          <Property Name="Expiry" Type="int" />
+          <Property Name="Expiry" Type="bigint" />
         </EntityType>
         <EntityType Name="CargoHold">
           <Key>
@@ -65,7 +65,7 @@
           <Property Name="BuyPrice" Type="int" />
           <Property Name="DemandStatus" Type="int" />
           <Property Name="SupplyStatus" Type="int" />
-          <Property Name="EntryDate" Type="datetime" />
+          <Property Name="EntryDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="MaterialList">
           <Key>
@@ -100,9 +100,9 @@
           </Key>
           <Property Name="SystemID" Type="int" Nullable="false" />
           <Property Name="SystemName" Type="text" />
-          <Property Name="SpaceX" Type="real" Nullable="false" />
-          <Property Name="SpaceY" Type="real" Nullable="false" />
-          <Property Name="SpaceZ" Type="real" Nullable="false" />
+          <Property Name="SpaceX" Type="float" Nullable="false" />
+          <Property Name="SpaceY" Type="float" Nullable="false" />
+          <Property Name="SpaceZ" Type="float" Nullable="false" />
           <Property Name="Government" Type="text" />
           <Property Name="Allegiance" Type="text" />
           <Property Name="Economy" Type="text" />
@@ -245,8 +245,7 @@
             <End Role="Stations" EntitySet="Stations" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EDTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -315,7 +314,7 @@
           <Property Name="BuyPrice" Type="Int32" />
           <Property Name="DemandStatus" Type="Int32" />
           <Property Name="SupplyStatus" Type="Int32" />
-          <Property Name="EntryDate" Type="DateTime" Precision="3" />
+          <Property Name="EntryDate" Type="DateTime" Precision="3" Nullable="false" />
           <NavigationProperty Name="CommodityGroup" Relationship="Self.FK_MarketDetails_CommodityGroup" FromRole="MarketDetails" ToRole="CommodityGroup" />
           <NavigationProperty Name="StarSystem" Relationship="Self.FK_MarketDetails_StarSystem" FromRole="MarketDetails" ToRole="StarSystem" />
           <NavigationProperty Name="Station" Relationship="Self.FK_MarketDetails_Stations" FromRole="MarketDetails" ToRole="Stations" />

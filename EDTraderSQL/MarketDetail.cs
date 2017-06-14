@@ -23,7 +23,7 @@ namespace EDTraderSQL
         public Nullable<int> BuyPrice { get; set; }
         public Nullable<int> DemandStatus { get; set; }
         public Nullable<int> SupplyStatus { get; set; }
-        public Nullable<System.DateTime> EntryDate { get; set; }
+        public System.DateTime EntryDate { get; set; }
     
         public virtual CommodityGroup CommodityGroup { get; set; }
         public virtual StarSystem StarSystem { get; set; }
