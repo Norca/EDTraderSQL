@@ -14,6 +14,7 @@
           <Property Name="DestinationSystem" Type="varchar(max)" />
           <Property Name="DestinationStation" Type="varchar(max)" />
           <Property Name="Expiry" Type="bigint" />
+          <Property Name="MissionCargo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CargoHold">
           <Key>
@@ -23,9 +24,9 @@
           <Property Name="CommodityName" Type="varchar" MaxLength="50" />
           <Property Name="Qty" Type="int" />
           <Property Name="AvgPurchasePrice" Type="real" />
-          <Property Name="Stolen" Type="bit" />
-          <Property Name="StockChecked" Type="bit" />
-          <Property Name="MissionCargo" Type="bit" />
+          <Property Name="Stolen" Type="bit" Nullable="false" />
+          <Property Name="StockChecked" Type="bit" Nullable="false" />
+          <Property Name="MissionCargo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Commodities">
           <Key>
@@ -38,9 +39,9 @@
         </EntityType>
         <EntityType Name="CommodityGroup">
           <Key>
-            <PropertyRef Name="CommodGroupName" />
+            <PropertyRef Name="CommodGroupID" />
           </Key>
-          <Property Name="CommodGroupID" Type="int" StoreGeneratedPattern="None" Nullable="false" />
+          <Property Name="CommodGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CommodGroupName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Faction">
@@ -120,18 +121,6 @@
           <Property Name="Economy" Type="varchar" MaxLength="50" />
           <Property Name="BlackMarketAvailable" Type="bit" />
         </EntityType>
-        <Association Name="FK_Commodities_CommodityGroup">
-          <End Role="CommodityGroup" Type="Self.CommodityGroup" Multiplicity="0..1" />
-          <End Role="Commodities" Type="Self.Commodities" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="Commodities">
-              <PropertyRef Name="CommodGroupName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Faction_StarSystem">
           <End Role="StarSystem" Type="Self.StarSystem" Multiplicity="0..1" />
           <End Role="Faction" Type="Self.Faction" Multiplicity="*" />
@@ -141,18 +130,6 @@
             </Principal>
             <Dependent Role="Faction">
               <PropertyRef Name="StarSystemID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MarketDetails_CommodityGroup">
-          <End Role="CommodityGroup" Type="Self.CommodityGroup" Multiplicity="0..1" />
-          <End Role="MarketDetails" Type="Self.MarketDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="MarketDetails">
-              <PropertyRef Name="CommodGroupName" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -180,18 +157,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RareCommodities_CommodityGroup">
-          <End Role="CommodityGroup" Type="Self.CommodityGroup" Multiplicity="0..1" />
-          <End Role="RareCommodities" Type="Self.RareCommodities" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="RareCommodities">
-              <PropertyRef Name="CommodGroupName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Stations_StarSystem">
           <End Role="StarSystem" Type="Self.StarSystem" Multiplicity="0..1" />
           <End Role="Stations" Type="Self.Stations" Multiplicity="*" />
@@ -216,17 +181,9 @@
           <EntitySet Name="RareCommodities" EntityType="Self.RareCommodities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StarSystem" EntityType="Self.StarSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stations" EntityType="Self.Stations" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Commodities_CommodityGroup" Association="Self.FK_Commodities_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroup" />
-            <End Role="Commodities" EntitySet="Commodities" />
-          </AssociationSet>
           <AssociationSet Name="FK_Faction_StarSystem" Association="Self.FK_Faction_StarSystem">
             <End Role="StarSystem" EntitySet="StarSystem" />
             <End Role="Faction" EntitySet="Faction" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MarketDetails_CommodityGroup" Association="Self.FK_MarketDetails_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroup" />
-            <End Role="MarketDetails" EntitySet="MarketDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_MarketDetails_StarSystem" Association="Self.FK_MarketDetails_StarSystem">
             <End Role="StarSystem" EntitySet="StarSystem" />
@@ -235,10 +192,6 @@
           <AssociationSet Name="FK_MarketDetails_Stations" Association="Self.FK_MarketDetails_Stations">
             <End Role="Stations" EntitySet="Stations" />
             <End Role="MarketDetails" EntitySet="MarketDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RareCommodities_CommodityGroup" Association="Self.FK_RareCommodities_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroup" />
-            <End Role="RareCommodities" EntitySet="RareCommodities" />
           </AssociationSet>
           <AssociationSet Name="FK_Stations_StarSystem" Association="Self.FK_Stations_StarSystem">
             <End Role="StarSystem" EntitySet="StarSystem" />
@@ -258,6 +211,7 @@
           <Property Name="DestinationSystem" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DestinationStation" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Expiry" Type="Int32" />
+          <Property Name="MissionCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CargoHold">
           <Key>
@@ -267,9 +221,9 @@
           <Property Name="CommodityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Qty" Type="Int32" />
           <Property Name="AvgPurchasePrice" Type="Single" />
-          <Property Name="Stolen" Type="Boolean" />
-          <Property Name="StockChecked" Type="Boolean" />
-          <Property Name="MissionCargo" Type="Boolean" />
+          <Property Name="Stolen" Type="Boolean" Nullable="false" />
+          <Property Name="StockChecked" Type="Boolean" Nullable="false" />
+          <Property Name="MissionCargo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Commodity">
           <Key>
@@ -279,17 +233,13 @@
           <Property Name="CommodityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EDCodeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CommodGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CommodityGroup" Relationship="EDTModel.FK_Commodities_CommodityGroup" FromRole="Commodity" ToRole="CommodityGroup" />
         </EntityType>
         <EntityType Name="CommodityGroup">
           <Key>
-            <PropertyRef Name="CommodGroupName" />
+            <PropertyRef Name="CommodGroupID" />
           </Key>
           <Property Name="CommodGroupID" Type="Int32" Nullable="false" />
           <Property Name="CommodGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Commodities" Relationship="EDTModel.FK_Commodities_CommodityGroup" FromRole="CommodityGroup" ToRole="Commodity" />
-          <NavigationProperty Name="MarketDetails" Relationship="EDTModel.FK_MarketDetails_CommodityGroup" FromRole="CommodityGroup" ToRole="MarketDetail" />
-          <NavigationProperty Name="RareCommodities" Relationship="EDTModel.FK_RareCommodities_CommodityGroup" FromRole="CommodityGroup" ToRole="RareCommodity" />
         </EntityType>
         <EntityType Name="Faction">
           <Key>
@@ -317,7 +267,6 @@
           <NavigationProperty Name="StarSystem" Relationship="Self.FK_MarketDetails_StarSystem" FromRole="MarketDetails" ToRole="StarSystem" />
           <NavigationProperty Name="Station" Relationship="Self.FK_MarketDetails_Stations" FromRole="MarketDetails" ToRole="Stations" />
           <Property Name="CommodGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CommodityGroup" Relationship="EDTModel.FK_MarketDetails_CommodityGroup" FromRole="MarketDetail" ToRole="CommodityGroup" />
         </EntityType>
         <EntityType Name="MaterialList">
           <Key>
@@ -345,7 +294,6 @@
           <Property Name="CommodityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EDCodeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CommodGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CommodityGroup" Relationship="EDTModel.FK_RareCommodities_CommodityGroup" FromRole="RareCommodity" ToRole="CommodityGroup" />
         </EntityType>
         <EntityType Name="StarSystem">
           <Key>
@@ -454,55 +402,7 @@
             <End Role="StarSystem" EntitySet="StarSystems" />
             <End Role="Stations" EntitySet="Stations" />
           </AssociationSet>
-          <AssociationSet Name="FK_Commodities_CommodityGroup" Association="EDTModel.FK_Commodities_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroups" />
-            <End Role="Commodity" EntitySet="Commodities" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MarketDetails_CommodityGroup" Association="EDTModel.FK_MarketDetails_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroups" />
-            <End Role="MarketDetail" EntitySet="MarketDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RareCommodities_CommodityGroup" Association="EDTModel.FK_RareCommodities_CommodityGroup">
-            <End Role="CommodityGroup" EntitySet="CommodityGroups" />
-            <End Role="RareCommodity" EntitySet="RareCommodities" />
-          </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_Commodities_CommodityGroup">
-          <End Type="EDTModel.CommodityGroup" Role="CommodityGroup" Multiplicity="0..1" />
-          <End Type="EDTModel.Commodity" Role="Commodity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="Commodity">
-              <PropertyRef Name="CommodGroupName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MarketDetails_CommodityGroup">
-          <End Type="EDTModel.CommodityGroup" Role="CommodityGroup" Multiplicity="0..1" />
-          <End Type="EDTModel.MarketDetail" Role="MarketDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="MarketDetail">
-              <PropertyRef Name="CommodGroupName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RareCommodities_CommodityGroup">
-          <End Type="EDTModel.CommodityGroup" Role="CommodityGroup" Multiplicity="0..1" />
-          <End Type="EDTModel.RareCommodity" Role="RareCommodity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommodityGroup">
-              <PropertyRef Name="CommodGroupName" />
-            </Principal>
-            <Dependent Role="RareCommodity">
-              <PropertyRef Name="CommodGroupName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -512,6 +412,7 @@
           <EntitySetMapping Name="ActiveMissions">
             <EntityTypeMapping TypeName="EDTModel.ActiveMission">
               <MappingFragment StoreEntitySet="ActiveMissions">
+                <ScalarProperty Name="MissionCargo" ColumnName="MissionCargo" />
                 <ScalarProperty Name="MissionID" ColumnName="MissionID" />
                 <ScalarProperty Name="MissionType" ColumnName="MissionType" />
                 <ScalarProperty Name="DestinationSystem" ColumnName="DestinationSystem" />

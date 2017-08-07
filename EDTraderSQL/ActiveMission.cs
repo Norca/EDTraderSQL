@@ -19,5 +19,6 @@ namespace EDTraderSQL
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
         public Nullable<int> Expiry { get; set; }
+        public string MissionCargo { get; set; }
     }
 }

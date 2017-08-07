@@ -18,7 +18,5 @@ namespace EDTraderSQL
         public string CommodityName { get; set; }
         public string EDCodeName { get; set; }
         public string CommodGroupName { get; set; }
-    
-        public virtual CommodityGroup CommodityGroup { get; set; }
     }
 }

@@ -20,9 +20,6 @@
         <AssociationConnector Association="EDTModel.FK_MarketDetails_StarSystem" ManuallyRouted="false" />
         <AssociationConnector Association="EDTModel.FK_MarketDetails_Stations" ManuallyRouted="false" />
         <AssociationConnector Association="EDTModel.FK_Stations_StarSystem" ManuallyRouted="false" />
-        <AssociationConnector Association="EDTModel.FK_Commodities_CommodityGroup" />
-        <AssociationConnector Association="EDTModel.FK_MarketDetails_CommodityGroup" />
-        <AssociationConnector Association="EDTModel.FK_RareCommodities_CommodityGroup" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

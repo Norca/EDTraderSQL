@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="EDJournalLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">""</Value>
+      <Value Profile="(Default)">"C:\Users\mlane.SKEUROPE\Google Drive\Development\Norca Code\Elite Dangerous"</Value>
     </Setting>
     <Setting Name="EDMarketLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">""</Value>
+      <Value Profile="(Default)">"C:\Users\mlane.SKEUROPE\Google Drive\Development\Norca Code\EDMarket"</Value>
     </Setting>
     <Setting Name="State" Type="System.Windows.Forms.FormWindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>

@@ -383,7 +383,7 @@ namespace EDTraderSQL
             if (Properties.Settings.Default.Size.Width == 0 || Properties.Settings.Default.Size.Height == 0)
             {
                 this.Width = 1800;
-                this.Height = 960;
+                this.Height = 1040;
             }
             else
             {
@@ -432,6 +432,11 @@ namespace EDTraderSQL
                 case "Undocked":
                     JournalUndocked();
                     UpdateMonitor("Journal - Undocked");
+                    break;
+
+                case "Died":
+                    JournalDied();
+                    UpdateMonitor("Journal - Died");
                     break;
 
                 case "MaterialCollected":

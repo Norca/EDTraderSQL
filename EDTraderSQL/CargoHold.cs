@@ -18,8 +18,8 @@ namespace EDTraderSQL
         public string CommodityName { get; set; }
         public Nullable<int> Qty { get; set; }
         public Nullable<float> AvgPurchasePrice { get; set; }
-        public Nullable<bool> Stolen { get; set; }
-        public Nullable<bool> StockChecked { get; set; }
-        public Nullable<bool> MissionCargo { get; set; }
+        public bool Stolen { get; set; }
+        public bool StockChecked { get; set; }
+        public bool MissionCargo { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace EDTraderSQL.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"C:\\Users\\mlane.SKEUROPE\\Google Drive\\Development\\Norca Code\\Elite Dangerous\"")]
         public string EDJournalLocation {
             get {
                 return ((string)(this["EDJournalLocation"]));
@@ -37,7 +37,7 @@ namespace EDTraderSQL.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"C:\\Users\\mlane.SKEUROPE\\Google Drive\\Development\\Norca Code\\EDMarket\"")]
         public string EDMarketLocation {
             get {
                 return ((string)(this["EDMarketLocation"]));

@@ -110,7 +110,7 @@
             this.BtnExit.BackColor = System.Drawing.Color.OrangeRed;
             this.BtnExit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.BtnExit.Location = new System.Drawing.Point(1697, 886);
+            this.BtnExit.Location = new System.Drawing.Point(1697, 966);
             this.BtnExit.Name = "BtnExit";
             this.BtnExit.Size = new System.Drawing.Size(75, 23);
             this.BtnExit.TabIndex = 0;
@@ -124,7 +124,7 @@
             this.btnSettings.BackColor = System.Drawing.Color.OrangeRed;
             this.btnSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnSettings.Location = new System.Drawing.Point(1616, 886);
+            this.btnSettings.Location = new System.Drawing.Point(1616, 966);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(75, 23);
             this.btnSettings.TabIndex = 1;
@@ -462,7 +462,7 @@
             // 
             // lvCargo
             // 
-            this.lvCargo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.lvCargo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lvCargo.BackColor = System.Drawing.Color.Black;
             this.lvCargo.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -482,7 +482,7 @@
             this.lvCargo.Name = "lvCargo";
             this.lvCargo.OwnerDraw = true;
             this.lvCargo.Scrollable = false;
-            this.lvCargo.Size = new System.Drawing.Size(850, 280);
+            this.lvCargo.Size = new System.Drawing.Size(850, 360);
             this.lvCargo.TabIndex = 23;
             this.lvCargo.UseCompatibleStateImageBehavior = false;
             this.lvCargo.View = System.Windows.Forms.View.Details;
@@ -507,7 +507,7 @@
             // 
             // CargoStolen
             // 
-            this.CargoStolen.Text = "Stolen";
+            this.CargoStolen.Text = "Status";
             this.CargoStolen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.CargoStolen.Width = 50;
             // 
@@ -553,7 +553,7 @@
             this.lblDBSystems.AutoSize = true;
             this.lblDBSystems.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDBSystems.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblDBSystems.Location = new System.Drawing.Point(186, 889);
+            this.lblDBSystems.Location = new System.Drawing.Point(186, 969);
             this.lblDBSystems.Name = "lblDBSystems";
             this.lblDBSystems.Size = new System.Drawing.Size(63, 16);
             this.lblDBSystems.TabIndex = 29;
@@ -565,7 +565,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label11.Location = new System.Drawing.Point(14, 889);
+            this.label11.Location = new System.Drawing.Point(14, 969);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(166, 16);
             this.label11.TabIndex = 28;
@@ -578,7 +578,7 @@
             this.lblDBStations.AutoSize = true;
             this.lblDBStations.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDBStations.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblDBStations.Location = new System.Drawing.Point(469, 889);
+            this.lblDBStations.Location = new System.Drawing.Point(469, 969);
             this.lblDBStations.Name = "lblDBStations";
             this.lblDBStations.Size = new System.Drawing.Size(63, 16);
             this.lblDBStations.TabIndex = 31;
@@ -590,7 +590,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label9.Location = new System.Drawing.Point(301, 889);
+            this.label9.Location = new System.Drawing.Point(301, 969);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(162, 16);
             this.label9.TabIndex = 30;
@@ -748,7 +748,7 @@
             // 
             // lvMissions
             // 
-            this.lvMissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.lvMissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvMissions.BackColor = System.Drawing.Color.Black;
             this.lvMissions.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -767,7 +767,7 @@
             this.lvMissions.Name = "lvMissions";
             this.lvMissions.OwnerDraw = true;
             this.lvMissions.Scrollable = false;
-            this.lvMissions.Size = new System.Drawing.Size(880, 160);
+            this.lvMissions.Size = new System.Drawing.Size(880, 240);
             this.lvMissions.TabIndex = 36;
             this.lvMissions.UseCompatibleStateImageBehavior = false;
             this.lvMissions.View = System.Windows.Forms.View.Details;
@@ -814,7 +814,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1784, 921);
+            this.ClientSize = new System.Drawing.Size(1784, 1001);
             this.Controls.Add(this.lvMissions);
             this.Controls.Add(this.lvRaw);
             this.Controls.Add(this.lvEncoded);
@@ -848,10 +848,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.BtnExit);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1800, 960);
             this.Name = "TradingCentral";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "Elite Dangerous Trader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TradingCentral_FormClosing);
             this.Load += new System.EventHandler(this.TradingCentral_Load);

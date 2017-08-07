@@ -214,20 +214,33 @@ namespace EDTraderSQL
 
         private void DisplayCargo()
         {
-            lvCargo.Items.Clear();
             using (var db = new EDTSQLEntities())
             {
+                if (db.StarSystems.Count() == 0)
+                {
+                    return;
+                }
                 if (CurrSystem != null)
                 {
-                    if (CurrSystem.Contains("-") == true)
+                    if (CurrSystem.Contains("=") == true)
                     {
-                        int index = CurrSystem.IndexOf("-");
+                        int index = CurrSystem.IndexOf("=");
                         CurrSystem = (index > 1 ? CurrSystem.Substring(0, index - 1) : null);
                     }
                 }
                 if (CurrSystem != null)
                 {
-                    StarSystem currsystem = db.StarSystems.SingleOrDefault(n => n.SystemName == CurrSystem);
+                    StarSystem currsystem = new StarSystem();
+                    if (CurrSystem == "" | db.StarSystems.Count(n => n.SystemName == CurrSystem) == 0)
+                    {
+                        currsystem = new StarSystem() { SpaceX = 0, SpaceY = 0, SpaceZ = 0 };
+                    }
+                    else
+                    {
+                        currsystem = db.StarSystems.Single(n => n.SystemName == CurrSystem); // Get Current System
+                    }
+
+                    lvCargo.Items.Clear();
 
                     if (db.CargoHolds.Count() > 0)
                     {
@@ -253,46 +266,62 @@ namespace EDTraderSQL
                             demandlist = demandlist.OrderByDescending(s => s.Profit).ThenBy(s => s.Distance).ToList();
 
                             // Return the best profit item
+                            var cargostatus = "Tradable";
+                            if (chitem.Stolen == true)
+                            {
+                                cargostatus = "Stolen";
+                            }
+                            else
+                            {
+                                if (chitem.MissionCargo == true)
+                                {
+                                    cargostatus = "Mission";
+                                }
+                            }
                             if (demandlist.Count() > 0)
                             {
                                 var topdemand = demandlist.First();
-                                var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), chitem.Stolen.ToString(), topdemand.SellSystem, topdemand.Distance.ToString(), topdemand.SellStation, topdemand.Profit.ToString() });
+                                // var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), chitem.Stolen.ToString(), topdemand.SellSystem, topdemand.Distance.ToString(), topdemand.SellStation, topdemand.Profit.ToString() });
+                                var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), cargostatus, topdemand.SellSystem, topdemand.Distance.ToString(), topdemand.SellStation, topdemand.Profit.ToString() });
                                 lvCargo.Items.Add(chlistitem);
                             }
                             else
                             {
-                                var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), chitem.Stolen.ToString(), "", "0.0", "", "0" });
+                                // var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), chitem.Stolen.ToString(), "", "0.0", "", "0" });
+                                var chlistitem = new ListViewItem(new[] { chitem.CommodityName, chitem.Qty.ToString(), chitem.AvgPurchasePrice.ToString(), cargostatus, "", "0.0", "", "0" });
                                 lvCargo.Items.Add(chlistitem);
                             }
                         }
                     }
+                    lvCargo.Refresh();
                 }
             }
-            lvCargo.Refresh();
         }
 
         private void DisplayMission()
         {
-            lvMissions.Items.Clear();
-
             // Current date & time as seconds
             DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
             var currseconds = dto.ToUnixTimeSeconds();
 
             using (var db = new EDTSQLEntities())
             {
+                if (db.StarSystems.Count() == 0)
+                {
+                    return;
+                }
                 if (CurrSystem != null)
                 {
-                    if (CurrSystem.Contains("-") == true)
+                    if (CurrSystem.Contains("=") == true)
                     {
-                        int index = CurrSystem.IndexOf("-");
+                        int index = CurrSystem.IndexOf("=");
                         CurrSystem = (index > 1 ? CurrSystem.Substring(0, index - 1) : null);
                     }
                 }
                 if (CurrSystem != null)
                 {
                     StarSystem currsystem = new StarSystem();
-                    if (CurrSystem == "")
+                    if (CurrSystem == "" | db.StarSystems.Count(n => n.SystemName == CurrSystem) == 0)
                     {
                         currsystem = new StarSystem() { SpaceX = 0, SpaceY = 0, SpaceZ = 0 };
                     }
@@ -300,6 +329,8 @@ namespace EDTraderSQL
                     {
                         currsystem = db.StarSystems.Single(n => n.SystemName == CurrSystem); // Get Current System
                     }
+
+                    lvMissions.Items.Clear();
 
                     if (db.ActiveMissions.Count() > 0)
                     {
@@ -319,31 +350,32 @@ namespace EDTraderSQL
                                 // Calculate the distance between current location and possible selling system
                                 double distance = Program.SystemDistance(currsystem.SpaceX, currsystem.SpaceY, currsystem.SpaceZ, starsystem.SpaceX, starsystem.SpaceY, starsystem.SpaceZ);
 
-                                var amlistitem = new ListViewItem(new[] { amitem.MissionID.ToString(), amitem.MissionType, "", amitem.DestinationSystem, distance.ToString(), amitem.DestinationStation, expiresIn });
+                                var amlistitem = new ListViewItem(new[] { amitem.MissionID.ToString(), amitem.MissionType, amitem.MissionCargo, amitem.DestinationSystem, distance.ToString(), amitem.DestinationStation, expiresIn });
                                 lvMissions.Items.Add(amlistitem);
                             }
                             else
                             {
-                                var amlistitem = new ListViewItem(new[] { amitem.MissionID.ToString(), amitem.MissionType, "", amitem.DestinationSystem, "", amitem.DestinationStation, expiresIn });
+                                var amlistitem = new ListViewItem(new[] { amitem.MissionID.ToString(), amitem.MissionType, amitem.MissionCargo, amitem.DestinationSystem, "", amitem.DestinationStation, expiresIn });
                                 lvMissions.Items.Add(amlistitem);
                             }
                         }
-                        lvMissions.Sort();
                     }
+                    lvMissions.Sort();
+                    lvMissions.Refresh();
                 }
             }
-            lvMissions.Refresh();
         }
 
         private void DisplayMaterial()
         {
-            lvRaw.Items.Clear();
-            lvMaterials.Items.Clear();
-            lvEncoded.Items.Clear();
             using (var db = new EDTSQLEntities())
             {
                 if (db.Materials.Count() > 0)
                 {
+                    lvRaw.Items.Clear();
+                    lvMaterials.Items.Clear();
+                    lvEncoded.Items.Clear();
+
                     foreach (Material matitem in db.Materials)
                     {
                         var matlistitem = new ListViewItem(new[] { matitem.MaterialName, matitem.Quantity.ToString() });
@@ -361,11 +393,11 @@ namespace EDTraderSQL
                             lvEncoded.Items.Add(matlistitem);
                         }
                     }
+                    lvRaw.Refresh();
+                    lvMaterials.Refresh();
+                    lvEncoded.Refresh();
                 }
             }
-            lvRaw.Refresh();
-            lvMaterials.Refresh();
-            lvEncoded.Refresh();
         }
     }
 }
