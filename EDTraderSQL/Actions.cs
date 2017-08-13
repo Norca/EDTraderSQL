@@ -364,7 +364,16 @@ namespace EDTraderSQL
             using (var db = new EDTSQLEntities())
             {
                 //Lookup NiceName of Cargo Item from Commodities table
-                Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                }
+                catch
+                {
+                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                }
+                
+                // Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
                 if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.Stolen == collectcargo.Stolen))
                 {
                     //Update CargoHold record
@@ -388,7 +397,16 @@ namespace EDTraderSQL
             using (var db = new EDTSQLEntities())
             {
                 //Lookup NiceName of Cargo Item from Commodities table
-                Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                }
+                catch
+                {
+                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                }
+                
+                // Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
                 if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
                 {
                     CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
@@ -434,7 +452,16 @@ namespace EDTraderSQL
             using (var db = new EDTSQLEntities())
             {
                 //Lookup NiceName of Cargo Item from Commodities table
-                Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                }
+                catch
+                {
+                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                }
+                
+                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
                 if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
                 {
                     //Update CargoHold record
@@ -460,7 +487,16 @@ namespace EDTraderSQL
             using (var db = new EDTSQLEntities())
             {
                 //Lookup NiceName of Cargo Item from Commodities table
-                Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                }
+                catch
+                {
+                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                }
+                
+                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
                 if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
                 {
                     CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
@@ -488,7 +524,16 @@ namespace EDTraderSQL
             using (var db = new EDTSQLEntities())
             {
                 //Lookup NiceName of Mined Item from Commodities table
-                Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                }
+                catch
+                {
+                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                }
+                
+                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
                 if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
                 {
                     //Update CargoHold record
