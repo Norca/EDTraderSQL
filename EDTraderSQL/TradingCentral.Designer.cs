@@ -130,7 +130,7 @@
             this.btnSettings.TabIndex = 1;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseVisualStyleBackColor = false;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            this.btnSettings.Click += new System.EventHandler(this.BtnSettings_Click);
             // 
             // label1
             // 
@@ -264,8 +264,8 @@
             this.lvSupply.TabIndex = 12;
             this.lvSupply.UseCompatibleStateImageBehavior = false;
             this.lvSupply.View = System.Windows.Forms.View.Details;
-            this.lvSupply.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lvSupply_DrawColumnHeader);
-            this.lvSupply.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lvSupply_DrawSubItem);
+            this.lvSupply.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvSupply_DrawColumnHeader);
+            this.lvSupply.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LvSupply_DrawSubItem);
             // 
             // SupplyProductName
             // 
@@ -344,8 +344,8 @@
             this.lvMaterials.TabIndex = 14;
             this.lvMaterials.UseCompatibleStateImageBehavior = false;
             this.lvMaterials.View = System.Windows.Forms.View.Details;
-            this.lvMaterials.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listMaterials_DrawColumnHeader);
-            this.lvMaterials.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listMaterials_DrawSubItem);
+            this.lvMaterials.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListMaterials_DrawColumnHeader);
+            this.lvMaterials.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListMaterials_DrawSubItem);
             // 
             // Mat_Material
             // 
@@ -486,8 +486,8 @@
             this.lvCargo.TabIndex = 23;
             this.lvCargo.UseCompatibleStateImageBehavior = false;
             this.lvCargo.View = System.Windows.Forms.View.Details;
-            this.lvCargo.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ltvCargo_DrawColumnHeader);
-            this.lvCargo.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ltvCargo_DrawSubItem);
+            this.lvCargo.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LtvCargo_DrawColumnHeader);
+            this.lvCargo.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LtvCargo_DrawSubItem);
             // 
             // CargoProduct
             // 
@@ -633,8 +633,8 @@
             this.lvDemand.TabIndex = 32;
             this.lvDemand.UseCompatibleStateImageBehavior = false;
             this.lvDemand.View = System.Windows.Forms.View.Details;
-            this.lvDemand.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ltvNeeded_DrawColumnHeader);
-            this.lvDemand.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ltvNeeded_DrawSubItem);
+            this.lvDemand.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LtvNeeded_DrawColumnHeader);
+            this.lvDemand.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LtvNeeded_DrawSubItem);
             // 
             // DemandProductName
             // 
@@ -701,8 +701,8 @@
             this.lvEncoded.TabIndex = 34;
             this.lvEncoded.UseCompatibleStateImageBehavior = false;
             this.lvEncoded.View = System.Windows.Forms.View.Details;
-            this.lvEncoded.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lvEncoded_DrawColumnHeader);
-            this.lvEncoded.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lvEncoded_DrawSubItem);
+            this.lvEncoded.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvEncoded_DrawColumnHeader);
+            this.lvEncoded.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LvEncoded_DrawSubItem);
             // 
             // columnHeader1
             // 
@@ -733,8 +733,8 @@
             this.lvRaw.TabIndex = 35;
             this.lvRaw.UseCompatibleStateImageBehavior = false;
             this.lvRaw.View = System.Windows.Forms.View.Details;
-            this.lvRaw.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lvRaw_DrawColumnHeader);
-            this.lvRaw.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lvRaw_DrawSubItem);
+            this.lvRaw.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvRaw_DrawColumnHeader);
+            this.lvRaw.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LvRaw_DrawSubItem);
             // 
             // columnHeader3
             // 
@@ -771,8 +771,8 @@
             this.lvMissions.TabIndex = 36;
             this.lvMissions.UseCompatibleStateImageBehavior = false;
             this.lvMissions.View = System.Windows.Forms.View.Details;
-            this.lvMissions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lvMissions_DrawColumnHeader);
-            this.lvMissions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lvMissions_DrawSubItem);
+            this.lvMissions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvMissions_DrawColumnHeader);
+            this.lvMissions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.LvMissions_DrawSubItem);
             // 
             // MissionID
             // 

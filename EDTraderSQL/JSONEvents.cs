@@ -192,6 +192,17 @@ namespace EDTraderSQL
         public List<CommodityReward> CommodityReward { get; set; }
     }
 
+    public class MissionRedirectedEvent
+    {
+        public string timestamp { get; set; }
+        public string @event { get; set; }
+        public int MissionID { get; set; }
+        public string NewDestinationStation { get; set; }
+        public string OldDestinationStation { get; set; }
+        public string NewDestinationSystem { get; set; }
+        public string OldDestinationSystem { get; set; }
+    }
+
     public class MissionFailedEvent
     {
         public string timestamp { get; set; }

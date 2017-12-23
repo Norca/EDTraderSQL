@@ -29,10 +29,10 @@ namespace EDTraderSQL
                     //Lookup NiceName of Cargo Item from Commodities table
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == inventitem.Name).First();
                     //Locate Cargo Item in CargoHold table
-                    if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName))
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper()))
                     {
                         //Update CargoHold record
-                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName).First();
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper()).First();
                         cargoUpdate.StockChecked = true;
                         db.SaveChanges();
                     }
@@ -367,25 +367,38 @@ namespace EDTraderSQL
                 try
                 {
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                    // Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.Stolen == collectcargo.Stolen))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.Stolen == collectcargo.Stolen).First();
+                        cargoUpdate.Qty = cargoUpdate.Qty + 1;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record because record of matching stolen status not found
+                        db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = collectcargo.Stolen, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 catch
                 {
-                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == collectcargo.Type).First();
-                }
-                
-                // Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
-                if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.Stolen == collectcargo.Stolen))
-                {
-                    //Update CargoHold record
-                    CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.Stolen == collectcargo.Stolen).First();
-                    cargoUpdate.Qty = cargoUpdate.Qty + 1;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    //Add CargoHold record because record of matching stolen status not found
-                    db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = collectcargo.Stolen, StockChecked = true, MissionCargo = false });
-                    db.SaveChanges();
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                    // Commodity commod = db.Commodities.Where(p => p.EDCodeName == collectcargo.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.Stolen == collectcargo.Stolen))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.Stolen == collectcargo.Stolen).First();
+                        cargoUpdate.Qty = cargoUpdate.Qty + 1;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record because record of matching stolen status not found
+                        db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = collectcargo.Stolen, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 db.Dispose();
             }
@@ -400,34 +413,10 @@ namespace EDTraderSQL
                 try
                 {
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
-                }
-                catch
-                {
-                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
-                }
-                
-                // Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
-                if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
-                {
-                    CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
-                    if (cargoitem.Qty == ejectcargo.Count)
+                    // Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
                     {
-                        //Remove item of cargo
-                        db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        //Update quantity of cargo
-                        cargoitem.Qty = cargoitem.Qty - ejectcargo.Count;
-                        db.SaveChanges();
-                    }
-                }
-                else
-                {
-                    if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == true))
-                    {
-                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == true).First();
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
                         if (cargoitem.Qty == ejectcargo.Count)
                         {
                             //Remove item of cargo
@@ -439,6 +428,65 @@ namespace EDTraderSQL
                             //Update quantity of cargo
                             cargoitem.Qty = cargoitem.Qty - ejectcargo.Count;
                             db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true))
+                        {
+                            CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true).First();
+                            if (cargoitem.Qty == ejectcargo.Count)
+                            {
+                                //Remove item of cargo
+                                db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                //Update quantity of cargo
+                                cargoitem.Qty = cargoitem.Qty - ejectcargo.Count;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                    // Commodity commod = db.Commodities.Where(p => p.EDCodeName == ejectcargo.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        if (cargoitem.Qty == ejectcargo.Count)
+                        {
+                            //Remove item of cargo
+                            db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            //Update quantity of cargo
+                            cargoitem.Qty = cargoitem.Qty - ejectcargo.Count;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true))
+                        {
+                            CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true).First();
+                            if (cargoitem.Qty == ejectcargo.Count)
+                            {
+                                //Remove item of cargo
+                                db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                //Update quantity of cargo
+                                cargoitem.Qty = cargoitem.Qty - ejectcargo.Count;
+                                db.SaveChanges();
+                            }
                         }
                     }
                 }
@@ -455,27 +503,42 @@ namespace EDTraderSQL
                 try
                 {
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        var existingCargoValue = cargoUpdate.AvgPurchasePrice * cargoUpdate.Qty;
+                        cargoUpdate.Qty = cargoUpdate.Qty + marketbuy.Count;
+                        cargoUpdate.AvgPurchasePrice = (existingCargoValue + (marketbuy.BuyPrice * marketbuy.Count)) / cargoUpdate.Qty;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record
+                        db.CargoHolds.Add(new CargoHold() { CommodityName = commod.CommodityName, Qty = marketbuy.Count, AvgPurchasePrice = marketbuy.BuyPrice, Stolen = false, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 catch
                 {
-                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketbuy.Type).First();
-                }
-                
-                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
-                if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
-                {
-                    //Update CargoHold record
-                    CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
-                    var existingCargoValue = cargoUpdate.AvgPurchasePrice * cargoUpdate.Qty;
-                    cargoUpdate.Qty = cargoUpdate.Qty + marketbuy.Count;
-                    cargoUpdate.AvgPurchasePrice = (existingCargoValue + (marketbuy.BuyPrice * marketbuy.Count)) / cargoUpdate.Qty;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    //Add CargoHold record
-                    db.CargoHolds.Add(new CargoHold() { CommodityName = commod.CommodityName, Qty = marketbuy.Count, AvgPurchasePrice = marketbuy.BuyPrice, Stolen = false, StockChecked = true, MissionCargo = false });
-                    db.SaveChanges();
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketbuy.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        var existingCargoValue = cargoUpdate.AvgPurchasePrice * cargoUpdate.Qty;
+                        cargoUpdate.Qty = cargoUpdate.Qty + marketbuy.Count;
+                        cargoUpdate.AvgPurchasePrice = (existingCargoValue + (marketbuy.BuyPrice * marketbuy.Count)) / cargoUpdate.Qty;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record
+                        db.CargoHolds.Add(new CargoHold() { CommodityName = commod.CommodityName, Qty = marketbuy.Count, AvgPurchasePrice = marketbuy.BuyPrice, Stolen = false, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 db.Dispose();
             }
@@ -490,27 +553,43 @@ namespace EDTraderSQL
                 try
                 {
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        if (cargoitem.Qty == marketsell.Count)
+                        {
+                            //Remove item of cargo
+                            db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            //Update quantity of cargo
+                            cargoitem.Qty = cargoitem.Qty - marketsell.Count;
+                            db.SaveChanges();
+                        }
+                    }
                 }
                 catch
                 {
-                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketsell.Type).First();
-                }
-                
-                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
-                if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
-                {
-                    CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
-                    if (cargoitem.Qty == marketsell.Count)
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == marketsell.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
                     {
-                        //Remove item of cargo
-                        db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        //Update quantity of cargo
-                        cargoitem.Qty = cargoitem.Qty - marketsell.Count;
-                        db.SaveChanges();
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        if (cargoitem.Qty == marketsell.Count)
+                        {
+                            //Remove item of cargo
+                            db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            //Update quantity of cargo
+                            cargoitem.Qty = cargoitem.Qty - marketsell.Count;
+                            db.SaveChanges();
+                        }
                     }
                 }
                 db.Dispose();
@@ -527,25 +606,38 @@ namespace EDTraderSQL
                 try
                 {
                     Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        cargoUpdate.Qty = cargoUpdate.Qty + 1;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record
+                        db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = false, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 catch
                 {
-                    Commodity commod = db.RareCommodities.Where(p => p.EDCodeName == miningrefined.Type).First();
-                }
-                
-                //Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
-                if (db.CargoHolds.Any(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false))
-                {
-                    //Update CargoHold record
-                    CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName == commod.CommodityName && o.MissionCargo == false).First();
-                    cargoUpdate.Qty = cargoUpdate.Qty + 1;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    //Add CargoHold record
-                    db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = false, StockChecked = true, MissionCargo = false });
-                    db.SaveChanges();
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                    //Commodity commod = db.Commodities.Where(p => p.EDCodeName == miningrefined.Type).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        //Update CargoHold record
+                        CargoHold cargoUpdate = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        cargoUpdate.Qty = cargoUpdate.Qty + 1;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Add CargoHold record
+                        db.CargoHolds.Add(new EDTraderSQL.CargoHold() { CommodityName = commod.CommodityName, Qty = 1, AvgPurchasePrice = 0, Stolen = false, StockChecked = true, MissionCargo = false });
+                        db.SaveChanges();
+                    }
                 }
                 db.Dispose();
             }
@@ -553,7 +645,7 @@ namespace EDTraderSQL
         }
 
         // 8 Station Services
-        // 8.15 MissionAccepted
+        // 8.16 MissionAccepted
         private void JournalMissionAccepted(string jstr)
         {
             MissionAcceptedEvent missionaccept = JsonConvert.DeserializeObject<MissionAcceptedEvent>(jstr);
@@ -613,7 +705,7 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.16 MissionCompleted
+        // 8.17 MissionCompleted
         private void JournalMissionCompleted(string jstr)
         {
             MissionCompletedEvent missioncomplete = JsonConvert.DeserializeObject<MissionCompletedEvent>(jstr);
@@ -666,7 +758,7 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.17 MissionFailed
+        // 8.18 MissionFailed
         private void JournalMissionFailed(string jstr)
         {
             MissionFailedEvent missionfailed = JsonConvert.DeserializeObject<MissionFailedEvent>(jstr);
@@ -681,17 +773,34 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.24 PayFines
+        // 8.19 MissionRedirected
+        private void MissionRedirected(string jstr)
+        {
+            MissionRedirectedEvent missionredirect = JsonConvert.DeserializeObject<MissionRedirectedEvent>(jstr);
+            using (var db = new EDTSQLEntities())
+            {
+                if (db.ActiveMissions.Any(o => o.MissionID == missionredirect.MissionID))
+                {
+                    // Update Mission record
+                    ActiveMission missionupdate = db.ActiveMissions.Where(o => o.MissionID == missionredirect.MissionID).First();
+                    missionupdate.DestinationStation = missionredirect.NewDestinationStation;
+                    missionupdate.DestinationSystem = missionredirect.NewDestinationSystem;
+                    db.SaveChanges();
+                }
+                db.Dispose();
+            }
+        }
+        // 8.26 PayFines
         private void JournalPayFines(string jstr)
         {
 
         }
-        // 8.25 PayLegacyFines
+        // 8.27 PayLegacyFines
         private void JournalPayLegacyFines(string jstr)
         {
 
         }
-        // 8.32 ScientificResearch
+        // 8.34 ScientificResearch
         private void JournalScientificResearch(string jstr)
         {
 

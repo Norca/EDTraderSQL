@@ -211,11 +211,11 @@ namespace EDTraderSQL
             {
                 foreach (var commod in db.Commodities)
                 {
-                    CommodityInGroup.Add(commod.CommodityName, commod.CommodGroupName);
+                    CommodityInGroup.Add(commod.CommodityName.ToUpper(), commod.CommodGroupName);
                 }
                 foreach (var rare in db.RareCommodities)
                 {
-                    RareInGroup.Add(rare.CommodityName, rare.CommodGroupName);
+                    RareInGroup.Add(rare.CommodityName.ToUpper(), rare.CommodGroupName);
                 }
                 db.Dispose();
             }
@@ -277,71 +277,74 @@ namespace EDTraderSQL
                 }
 
                 //Read System & Station so previous market entries can be removed
-                MarketInfo getLocation = records.First();
-                using (var db = new EDTSQLEntities())
+                if (records.Count > 0)
                 {
-                    StarSystem starsystem = db.StarSystems.SingleOrDefault(p => p.SystemName == getLocation.StarSystem);
-                    Station station = db.Stations.SingleOrDefault(o => o.StationName == getLocation.Station);
-                    UpdateMonitor("Market Data - Update found");
-
-                    if (station == null)
+                    MarketInfo getLocation = records.First();
+                    using (var db = new EDTSQLEntities())
                     {
-                        UpdateMonitor("Market Data - Station not yet known");
-                        db.Dispose();
-                    }
-                    else
-                    {
-                        db.MarketDetails.RemoveRange(db.MarketDetails.Where(x => x.SystemID == starsystem.SystemID && x.StationID == station.StationID));
-                        db.SaveChanges();
+                        StarSystem starsystem = db.StarSystems.SingleOrDefault(p => p.SystemName == getLocation.StarSystem);
+                        Station station = db.Stations.SingleOrDefault(o => o.StationName == getLocation.Station);
+                        UpdateMonitor("Market Data - Update found");
 
-                        foreach (MarketInfo marketcommodity in records)
+                        if (station == null)
                         {
-                            if (CommodityInGroup.ContainsKey(marketcommodity.Commodity))
-                            {
-                                //Add new Market detail lines
-                                db.MarketDetails.Add(new MarketDetail()
-                                {
-                                    SystemID = starsystem.SystemID,
-                                    StationID = station.StationID,
-                                    CommodGroupName = CommodityInGroup[marketcommodity.Commodity],
-                                    CommodityName = marketcommodity.Commodity,
-                                    SellPrice = marketcommodity.SellPrice,
-                                    BuyPrice = marketcommodity.BuyPrice,
-                                    DemandStatus = StockLevels[marketcommodity.DemandLevel],
-                                    SupplyStatus = StockLevels[marketcommodity.SupplyLevel],
-                                    EntryDate = marketcommodity.LogDate
-                                });
-                            }
-                            else
-                            {
-                                //Add new Market detail lines
-                                db.MarketDetails.Add(new MarketDetail()
-                                {
-                                    SystemID = starsystem.SystemID,
-                                    StationID = station.StationID,
-                                    CommodGroupName = RareInGroup[marketcommodity.Commodity],
-                                    CommodityName = marketcommodity.Commodity,
-                                    SellPrice = marketcommodity.SellPrice,
-                                    BuyPrice = marketcommodity.BuyPrice,
-                                    DemandStatus = StockLevels[marketcommodity.DemandLevel],
-                                    SupplyStatus = StockLevels[marketcommodity.SupplyLevel],
-                                    EntryDate = marketcommodity.LogDate
-                                });
-                            }
+                            UpdateMonitor("Market Data - Station not yet known");
+                            db.Dispose();
                         }
-                        UpdateMonitor("Market Data - Updated");
-                        db.SaveChanges();
-                        db.Dispose();
-                        MarketDirty = false;
-                        btnMDirty.BackColor = Color.Red;
-                        btnMDirty.Refresh();
-                        //File.Delete(MarketDump);
-                    }
-                }
-                sr.Dispose();
+                        else
+                        {
+                            db.MarketDetails.RemoveRange(db.MarketDetails.Where(x => x.SystemID == starsystem.SystemID && x.StationID == station.StationID));
+                            db.SaveChanges();
 
-                ObtainTopProductsToBuy();
-                ObtainTopProductsDemanded();
+                            foreach (MarketInfo marketcommodity in records)
+                            {
+                                if (CommodityInGroup.ContainsKey(marketcommodity.Commodity.ToUpper()))
+                                {
+                                    //Add new Market detail lines
+                                    db.MarketDetails.Add(new MarketDetail()
+                                    {
+                                        SystemID = starsystem.SystemID,
+                                        StationID = station.StationID,
+                                        CommodGroupName = CommodityInGroup[marketcommodity.Commodity.ToUpper()],
+                                        CommodityName = marketcommodity.Commodity,
+                                        SellPrice = marketcommodity.SellPrice,
+                                        BuyPrice = marketcommodity.BuyPrice,
+                                        DemandStatus = StockLevels[marketcommodity.DemandLevel],
+                                        SupplyStatus = StockLevels[marketcommodity.SupplyLevel],
+                                        EntryDate = marketcommodity.LogDate
+                                    });
+                                }
+                                else
+                                {
+                                    //Add new Market detail lines
+                                    db.MarketDetails.Add(new MarketDetail()
+                                    {
+                                        SystemID = starsystem.SystemID,
+                                        StationID = station.StationID,
+                                        CommodGroupName = RareInGroup[marketcommodity.Commodity.ToUpper()],
+                                        CommodityName = marketcommodity.Commodity,
+                                        SellPrice = marketcommodity.SellPrice,
+                                        BuyPrice = marketcommodity.BuyPrice,
+                                        DemandStatus = StockLevels[marketcommodity.DemandLevel],
+                                        SupplyStatus = StockLevels[marketcommodity.SupplyLevel],
+                                        EntryDate = marketcommodity.LogDate
+                                    });
+                                }
+                            }
+                            UpdateMonitor("Market Data - Updated");
+                            db.SaveChanges();
+                            db.Dispose();
+                            MarketDirty = false;
+                            btnMDirty.BackColor = Color.Red;
+                            btnMDirty.Refresh();
+                            //File.Delete(MarketDump);
+                        }
+                    }
+                    sr.Dispose();
+
+                    ObtainTopProductsToBuy();
+                    ObtainTopProductsDemanded();
+                }
                 DisplayCargo();
             }
         } // ReadMarketLines() End
@@ -556,7 +559,7 @@ namespace EDTraderSQL
             Properties.Settings.Default.Save();
         }
 
-        private void lvSupply_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvSupply_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -571,7 +574,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvSupply_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LvSupply_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -583,7 +586,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void ltvNeeded_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LtvNeeded_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -598,7 +601,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void ltvNeeded_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LtvNeeded_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -610,7 +613,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void listMaterials_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void ListMaterials_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -625,7 +628,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void listMaterials_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void ListMaterials_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -636,7 +639,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void ltvCargo_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LtvCargo_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -651,7 +654,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void ltvCargo_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LtvCargo_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -663,7 +666,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvRaw_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvRaw_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -678,7 +681,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvRaw_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LvRaw_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -689,7 +692,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvEncoded_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvEncoded_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -704,7 +707,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvEncoded_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LvEncoded_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -715,7 +718,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
+        private void BtnSettings_Click(object sender, EventArgs e)
         {
             string JournalSet = Properties.Settings.Default.EDJournalLocation;
             string MarketSet = Properties.Settings.Default.EDMarketLocation;
@@ -743,7 +746,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvMissions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvMissions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
@@ -758,7 +761,7 @@ namespace EDTraderSQL
             }
         }
 
-        private void lvMissions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void LvMissions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             using (StringFormat sf = new StringFormat())
             {
