@@ -502,6 +502,12 @@ namespace EDTraderSQL
                     UpdateMonitor("Journal - Mission Failed");
                     break;
 
+                case "MissionRedirected":
+                    JournalMissionRedirected(jstr);
+                    DisplayCargo();
+                    UpdateMonitor("Journal - Mission Redirected");
+                    break;
+
                 case "PayFines":
                     JournalPayFines(jstr);
                     UpdateMonitor("Journal - Pay Fines");

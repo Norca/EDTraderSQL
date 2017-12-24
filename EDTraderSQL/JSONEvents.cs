@@ -211,6 +211,15 @@ namespace EDTraderSQL
         public int MissionID { get; set; }
     }
 
+    public class SearchAndRescueEvent
+    {
+        public string timestamp { get; set; }
+        public string @event { get; set; }
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public int Reward { get; set; }
+    }
+
     public class MaterialCollectedEvent
     {
         public string timestamp { get; set; }

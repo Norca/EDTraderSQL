@@ -645,7 +645,7 @@ namespace EDTraderSQL
         }
 
         // 8 Station Services
-        // 8.16 MissionAccepted
+        // 8.17 MissionAccepted
         private void JournalMissionAccepted(string jstr)
         {
             MissionAcceptedEvent missionaccept = JsonConvert.DeserializeObject<MissionAcceptedEvent>(jstr);
@@ -705,7 +705,7 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.17 MissionCompleted
+        // 8.18 MissionCompleted
         private void JournalMissionCompleted(string jstr)
         {
             MissionCompletedEvent missioncomplete = JsonConvert.DeserializeObject<MissionCompletedEvent>(jstr);
@@ -758,7 +758,7 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.18 MissionFailed
+        // 8.19 MissionFailed
         private void JournalMissionFailed(string jstr)
         {
             MissionFailedEvent missionfailed = JsonConvert.DeserializeObject<MissionFailedEvent>(jstr);
@@ -773,8 +773,8 @@ namespace EDTraderSQL
                 db.Dispose();
             }
         }
-        // 8.19 MissionRedirected
-        private void MissionRedirected(string jstr)
+        // 8.20 MissionRedirected
+        private void JournalMissionRedirected(string jstr)
         {
             MissionRedirectedEvent missionredirect = JsonConvert.DeserializeObject<MissionRedirectedEvent>(jstr);
             using (var db = new EDTSQLEntities())
@@ -800,20 +800,108 @@ namespace EDTraderSQL
         {
 
         }
-        // 8.34 ScientificResearch
+        // 8.35 ScientificResearch
         private void JournalScientificResearch(string jstr)
         {
 
         }
+        // 8.36 SearchAndRescue
+        private void JournalSearchAndRescue(string jstr)
+        {
+            SearchAndRescueEvent searchrescue = JsonConvert.DeserializeObject<SearchAndRescueEvent>(jstr);
+            using (var db = new EDTSQLEntities())
+            {
+                //Lookup NiceName of Cargo Item from Commodities table
+                try
+                {
+                    Commodity commod = db.Commodities.Where(p => p.EDCodeName == searchrescue.Name).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        if (cargoitem.Qty == searchrescue.Count)
+                        {
+                            //Remove item of cargo
+                            db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            //Update quantity of cargo
+                            cargoitem.Qty = cargoitem.Qty - searchrescue.Count;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true))
+                        {
+                            CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true).First();
+                            if (cargoitem.Qty == searchrescue.Count)
+                            {
+                                //Remove item of cargo
+                                db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                //Update quantity of cargo
+                                cargoitem.Qty = cargoitem.Qty - searchrescue.Count;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    RareCommodity commod = db.RareCommodities.Where(p => p.EDCodeName == searchrescue.Name).First();
+                    if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false))
+                    {
+                        CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == false).First();
+                        if (cargoitem.Qty == searchrescue.Count)
+                        {
+                            //Remove item of cargo
+                            db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            //Update quantity of cargo
+                            cargoitem.Qty = cargoitem.Qty - searchrescue.Count;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        if (db.CargoHolds.Any(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true))
+                        {
+                            CargoHold cargoitem = db.CargoHolds.Where(o => o.CommodityName.ToUpper() == commod.CommodityName.ToUpper() && o.MissionCargo == true).First();
+                            if (cargoitem.Qty == searchrescue.Count)
+                            {
+                                //Remove item of cargo
+                                db.CargoHolds.RemoveRange(db.CargoHolds.Where(o => o.TradeID == cargoitem.TradeID));
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                //Update quantity of cargo
+                                cargoitem.Qty = cargoitem.Qty - searchrescue.Count;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                }
+                db.Dispose();
+            }
+        }
 
-        // 10 Other Events
-        // 10.4 CommitCrime
-        private void JournalCommitCrime(string jstr)
+       // 10 Other Events
+       // 10.4 CommitCrime
+       private void JournalCommitCrime(string jstr)
         {
 
         }
-        // 10.31 Synthesis
-        private void JournalSynthesis(string jstr)
+       // 10.31 Synthesis
+       private void JournalSynthesis(string jstr)
         {
 
         }
